@@ -54,7 +54,7 @@ def mdParser(filepath):
                 yaml_string += line
             else:
                 content += line
-    md_data = yaml.load(yaml_string)
+    md_data = yaml.load(yaml_string, Loader=yaml.SafeLoader)
     if not "content" in md_data.keys():
         for patt in noNeedPatts:
             content = re.sub(patt, " ", content)

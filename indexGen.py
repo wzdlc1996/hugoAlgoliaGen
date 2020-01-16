@@ -26,8 +26,7 @@ base_level = "Hugo Site"
 
 def create_index_list(walk_dir, bsURL):
     """Create a list of index entries starting from the directory walk_dir"""
-    base_url = bsURL
-    global base_level, docsearch_mapping, docsearch_weight
+    #global base_level, docsearch_mapping, docsearch_weight
 
     # used to store all indexed item (markdown files)
     index_list = []
@@ -50,6 +49,16 @@ def create_index_list(walk_dir, bsURL):
                 # index.md have special URLs
                 if filename != "index.md":
                     subpaths.append(filename[:-3])
+                    
+                uri = "/".join(subpaths)
+                sys.stderr.write("Indexing '" + filepath + "' (" + uri + "\n")
+                filedata = util.mdParser(filepath)
+                
+                filedata["objectID"] = uri
+                filedata["uri"] = uri
+                index_list.append(filedata)
+    return index_list
+    """
                 
                 # set up list for the hierarchy of the markdown file
                 hierarchy_list = [base_level]
@@ -63,6 +72,7 @@ def create_index_list(walk_dir, bsURL):
 
                 # get data from the file (frontmatter and content)
                 filedata = parse_md(filepath)
+                
 
                 # create index entry
                 indexed_item = {'objectID': objectID, 'url': url.lower() }
@@ -110,14 +120,17 @@ def create_index_list(walk_dir, bsURL):
                 index_list.append(indexed_item)
     sys.stderr.write("Done indexing .md files in '" + walk_dir + "'" + "\n")
     return index_list
-
+    """
+"""
 def create_empty_hierarchy():
-    """Create a empty hierarchy structure (dict)."""
+
+#    Create a empty hierarchy structure (dict).
+
     empty_hierarchy = {}
     for level_index in range(7):
         empty_hierarchy["lvl" + str(level_index)] = None
     return empty_hierarchy
-
+"""
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
@@ -126,7 +139,7 @@ if __name__ == '__main__':
     
     cfgFileName = sys.argv[1]
     fileExt = cfgFileName.split(".")[1]
-    z = infoGet(fileExt)
+    z = util.infoGet(fileExt)
     
     # gather index data
     index_list = create_index_list("./"+z["contentdir"], z["baseURL"])
@@ -134,4 +147,4 @@ if __name__ == '__main__':
     # output the index as readable json to stdout. does not escape UTF-8 characters
     #sys.stdout.write(json.dumps(index_list, ensure_ascii=False, indent=2))
     with open("./contIndex.json", "w") as f:
-        f.write(json.dumps(index_list, ensure_ascii=False, indent=2))
+        f.write(json.dumps(index_list, ensure_ascii=False, indent=2, default=str))
