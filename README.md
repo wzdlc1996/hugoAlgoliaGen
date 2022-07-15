@@ -9,7 +9,7 @@ One need to install the following module or make them avalibale for python
 interpreter:
 
 1.  toml
-2.  yaml
+2.  yaml or pyyaml
 3.  json
 
 ## Usage

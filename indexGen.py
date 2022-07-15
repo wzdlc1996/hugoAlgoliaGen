@@ -53,6 +53,8 @@ def create_index_list(walk_dir, bsURL):
                 uri = "/".join(subpaths)
                 sys.stderr.write("Indexing '" + filepath + "' (" + uri + "\n")
                 filedata = util.mdParser(filepath)
+                if filedata is None:
+                    continue
                 
                 filedata["objectID"] = uri
                 filedata["uri"] = uri

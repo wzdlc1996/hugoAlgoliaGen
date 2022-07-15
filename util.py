@@ -55,6 +55,9 @@ def mdParser(filepath):
             else:
                 content += line
     md_data = yaml.load(yaml_string, Loader=yaml.SafeLoader)
+    if md_data is None:
+        print("Error in", filepath)
+        return None
     if not "content" in md_data.keys():
         for patt in noNeedPatts:
             content = re.sub(patt, " ", content)
